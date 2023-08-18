@@ -1,114 +1,113 @@
-# Locadora de Filmes
+
+# Projeto Semanal | Locadora de Filmes
+
+## Índice
+
+- [Introdução](#introdução)
+- [Instruções de Uso](#instruções-de-uso)
+- [Regras da Entrega](#regras-da-entrega)
+- [Tabela](#tabela)
+- [Endpoints da Aplicação](#endpoints-da-aplicação)
+- [Regras da Aplicação](#regras-da-aplicação)
+  - [GET /movies](#get-movies)
+  - [Casos de Erro](#casos-de-erro)
+- [Exemplos de Requisição](#exemplos-de-requisição)
+- [Middlewares](#middlewares)
+- [Observações](#observações)
 
 ## Introdução
 
-Hoje você recebeu uma demanda inesperada. O gestor de uma _locadora de filmes_ entrou em contato solicitando seus serviços.
+Neste projeto, implementamos uma API para gerenciar a coleção de filmes de uma locadora que é utilizada em uma plataforma de streaming.
 
-O objetivo é elaborar um microsserviço que será utilizado em uma plataforma de streaming. Essa API terá o intuito de gerenciar a coleção de filmes disponíveis.
+## Tecnologias Utilizadas
 
-Abaixo estão todas as regras de negócio definidas pelo cliente, tanto para a entrega quanto para a aplicação. Esse é um cliente muito exigente, portanto siga à risca todas as regras impostas.
+[![TypeScript](https://img.shields.io/badge/TypeScript-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-green?logo=node.js)](https://nodejs.org/)
+[![Express](https://img.shields.io/badge/Express-gray?logo=express)](https://expressjs.com/)
+[![pgFormat](https://img.shields.io/badge/pgFormat-blue)](https://www.npmjs.com/package/pgformat)
 
-Vamos lá?!
 
-#
+## Instruções de Uso
 
-    O repositório da entrega conta com um arquivo chamado movies_workspace. Esse arquivo é um documento de design utilizado no insomnia.
-    Ele contém todas as rotas necessárias para que a aplicação esteja de acordo com as regras impostas.
-    Esse arquivo também será utilizado por instrutores e monitores na correção das entregas.
+1. Clone o repositório da entrega.
+2. Importe o arquivo "movies_workspace" no aplicativo Insomnia para obter as rotas e regras da API.
 
-    O workspace em questão possui duas páginas:
-      Página para Debug:
-        - pode ser utilizado a vontade e ter seus valores para criação, listagem, atualização ou deleção, alterados sem problemas.
+**Observações**:
+- O workspace do Insomnia possui duas páginas:
+  - Página para Debug: Pode ser usada para testes.
+  - Página para Testes: Não altere nenhum teste ou rota nessa página.
 
-      Página para Testes:
-        - NUNCA ALTERE NENHUM TESTE OU ROTA DA PÁGINA DE TESTES;
-        - ATENÇÃO: sempre REINICIE o servidor e DROP SUA TABELA E RECRIE NOVAMENTE, antes de cada novo teste ou bateria de testes, que for executar;
+## Regras da Entrega
 
-#
-
-## Regras da entrega
-
-A entrega deve seguir as seguintes regras:
-
-- O código deve estar em TypeScript, caso não esteja a **entrega será zerada**.
-- Deverá ser utilizado um banco de dados **_postgres_** para a elaboração da API.
-- O nome da tabela, das colunas e demais especificações, devem ser seguidas a risca. Caso tenha divergência, **será descontado nota**.
-- Deve conter uma pasta **sql** na **raiz do projeto** com dois arquivos:
-  - **create_table.sql**: contendo a criação da tabela **movie**;
-    - deve conter **APENAS** a criação da **TABELA**.
-  - **diagram.png/jgp**: um arquivo **_.png_** ou **_.jpg_** contendo o diagrama da tabela.
-  - caso o arquivo **_create_table.sql_** não exista, **a entrega será zerada**.
-- A organização de arquivos deve seguir o que foi visto previamente.
-
-#
+- Código em TypeScript.
+- Banco de dados Postgres.
+- Nome da tabela, colunas e especificações devem ser seguidos rigorosamente.
+- Pasta "sql" com:
+  - create_table.sql: Criação da tabela "movies".
+- Diagrama da tabela em "diagram.png" ou "diagram.jpg".
+- Organização de arquivos como visto previamente.
 
 ## Tabela
 
-O nome da tabela **deve** ser **movies**.
+Nome da tabela: movies
 
-| Coluna       | Especificações                               |
-| ------------ | -------------------------------------------- |
-| **id**       | inteiro, auto incrementado e chave primária. |
-| **name**     | string tamanho 50 e não nulo.                |
-| **category** | string tamanho 20 e não nulo.                |
-| **duration** | inteiro e não nulo.                          |
-| **price**    | inteiro e não nulo.                          |
+| Coluna    | Especificações                  |
+|-----------|---------------------------------|
+| id        | Inteiro, serial, chave primária |
+| name      | String, tamanho 50, não nulo    |
+| category  | String, tamanho 20, não nulo    |
+| duration  | Inteiro, não nulo               |
+| price     | Inteiro, não nulo               |
 
-#
+## Endpoints da Aplicação
 
-## Endpoints da aplicação
+| Método  | Endpoint     | Responsabilidade          |
+|---------|--------------|---------------------------|
+| POST    | /movies      | Criar um filme            |
+| GET     | /movies      | Listar todos os filmes    |
+| GET     | /movies/:id  | Buscar filme por id       |
+| PATCH   | /movies/:id  | Atualizar filme por id    |
+| DELETE  | /movies/:id  | Deletar filme por id      |
 
-| Método | Endpoint    | Responsabilidade       |
-| ------ | ----------- | ---------------------- |
-| POST   | /movies     | Criar os filmes        |
-| GET    | /movies     | Listar todos os filmes |
-| GET    | /movies/:id | Buscar filme por id    |
-| PATCH  | /movies/:id | Atualizar filme por id |
-| DELETE | /movies/:id | Deletar filme por id   |
-
-#
-
-## Regras da aplicação
+## Regras da Aplicação
 
 ### GET /movies
 
-- A rota **GET /movies**, além de listar todos os filmes do cinema, também deve conseguir listar os filmes a partir da categoria específica.
-  - Essa categoria deve ser enviada pelo query parameter **category**.
-  - Caso a categoria enviada não exista, deve-se retornar todos os filmes do banco.
+- Listar todos os filmes do cinema.
+- Listar filmes por categoria enviada via query parameter "category".
+- Caso a categoria não exista, retornar todos os filmes do banco.
 
-## Casos de erro
+### Casos de Erro
 
-- Na rotas **GET, PATCH e DELETE /movies/:id**, caso **id** não exista, deve-se retornar a mensagem de erro e status code mencionados abaixo:
+Nas rotas GET, PATCH e DELETE /movies/:id, caso o id não exista:
 
-  - Status code: **_404 NOT FOUND._**
-  - Mensagem de retorno:
+Resposta do servidor:
 
-    ```json
-    {
-      "message": "Movie not found!"
-    }
-    ```
+```json
+{
+  "message": "Movie not found!"
+}
+```
 
-- Na rotas **POST e PATCH**, caso **name** já exista, deve retornar a mensagem de erro abaixo. O status code deve ser o mencionado abaixo:
+Status code: 404 NOT FOUND.
 
-  - Status code: **_409 CONFLICT._**
-  - Mensagem de retorno:
+Nas rotas POST e PATCH, caso o "name" já exista:
 
-    ```json
-    {
-      "message": "Movie name already exists!"
-    }
-    ```
+Resposta do servidor:
 
-#
+```json
+{
+  "message": "Movie name already exists!"
+}
+```
 
-## Exemplos de requisição
+Status code: 409 CONFLICT.
+
+## Exemplos de Requisição
 
 ### POST /movies
 
-Rota de criação de filme. Deve ser possível criar um filme.
-| **Corpo da requisição:** |
-|-|
+**Corpo de envio da requisição**:
 
 ```json
 {
@@ -119,9 +118,7 @@ Rota de criação de filme. Deve ser possível criar um filme.
 }
 ```
 
-| **Resposta do servidor:**           |
-| ----------------------------------- |
-| **Status code:** **_201 CREATED._** |
+**Resposta do servidor**:
 
 ```json
 {
@@ -133,12 +130,11 @@ Rota de criação de filme. Deve ser possível criar um filme.
 }
 ```
 
+Status code: 201 CREATED.
+
 ### GET /movies
 
-Rota de listagem de filmes. Deve ser possível retornar todos os filmes do cinema.
-| Resposta do servidor: |
-| - |
-|**Status code:** **_200 OK._**|
+**Resposta do servidor**:
 
 ```json
 [
@@ -159,109 +155,14 @@ Rota de listagem de filmes. Deve ser possível retornar todos os filmes do cinem
 ]
 ```
 
-#### Com query parameter
+Status code: 200 OK.
 
-O exemplo abaixo foi realizado na seguinte rota: **/movies?category=Animação**.
-| Resposta do servidor: |
-| - |
-| **Status code:** **_200 OK._** |
+## Middlewares
 
-```json
-[
-  {
-    "id": 1,
-    "name": "Divertidamente",
-    "category": "Animação",
-    "duration": 120,
-    "price": 35
-  }
-]
-```
+- Verificação de Nome Existente: Middleware para verificar se o nome do produto já existe no banco.
+- Verificação de ID Existente: Middleware para verificar se o ID do produto existe no banco.
 
-#### Com query parameter
+## Observações
 
-O exemplo abaixo foi realizado na seguinte rota: **/movies?category=outra categoria**.
-| Resposta do servidor: |
-| - |
-| **Status code:** **_200 OK._** |
+A constante "market" em "database.ts" simula o banco de dados.
 
-```json
-[
-  {
-    "id": 1,
-    "name": "Divertidamente",
-    "category": "Animação",
-    "duration": 120,
-    "price": 35
-  },
-  {
-    "id": 2,
-    "name": "Matrix",
-    "category": "Ficção",
-    "duration": 120,
-    "price": 35
-  }
-]
-```
-
-### GET /movies/:id
-
-Rota de busca de filme. Deve ser possível buscar um filme pelo id.
-O exemplo abaixo foi realizado na seguinte rota: **/movies/1**.
-| Resposta do servidor: |
-| - |
-| **Status code:** **_200 OK._** |
-
-```json
-[
-  {
-    "id": 1,
-    "name": "Divertidamente",
-    "category": "Animação",
-    "duration": 120,
-    "price": 35
-  }
-]
-```
-
-### PATCH /movies/:id
-
-Rota de atualização de filme. Deve ser possível atualizar um filme pelo id. Todos os campos podem ser atualizados de forma opcional.
-
-O exemplo abaixo foi realizado na seguinte rota: **/movies/2**.
-| **Corpo da requisição:** |
-|-|
-
-```json
-{
-  "name": "Matrix 2"
-}
-```
-
-| Resposta do servidor:          |
-| ------------------------------ |
-| **Status code:** **_200 OK._** |
-
-```json
-{
-  "id": 2,
-  "name": "Matrix 2",
-  "category": "Ficção",
-  "duration": 120,
-  "price": 35
-}
-```
-
-### DELETE /movies/:id
-
-Rota de deleção de filme. Deve ser possível deletar um filme pelo id.
-O exemplo abaixo foi realizado na seguinte rota: **/movies/1**.
-| Resposta do servidor: |
-|-|
-|**Status code:** **_204 NO CONTENT._**|
-
-## Importante!
-
-Não esqueça de adicionar **_team-m4-correcoes_** no seu repositório do github, para que seja possível realizarmos as correções.
-
-Também não se esqueça de enviar o link do repositório na submissão da entrega.
