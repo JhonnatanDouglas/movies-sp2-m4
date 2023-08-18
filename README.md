@@ -17,7 +17,7 @@
 
 ## Introdução
 
-Neste projeto, implementamos uma API para gerenciar a coleção de filmes de uma locadora que é utilizada em uma plataforma de streaming.
+Neste projeto, implementei uma API para gerenciar a coleção de filmes de uma locadora que é utilizada em uma plataforma de streaming.
 
 ## Tecnologias Utilizadas
 
